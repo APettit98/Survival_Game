@@ -1,0 +1,14 @@
+Valid directions:
+                 'north' or 'n'
+                 'south' or 's'
+                 'east'  or 'e'
+                 'west'  or 'w'
+
+
+Valid commands:
+                'scavenge'
+                'hunt'
+                'build'
+                'fish'
+                'walk'
+                'sleep'

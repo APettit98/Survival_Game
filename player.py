@@ -1,5 +1,5 @@
 class player:
-    def __init__(self,name,materials,food,health,shelter,near_water):
+    def __init__(self,name):
         self.name = name
         self.materials = {"sticks":0, "string":0, "rope":0,"knives":0,
                           "matchboxes":0, "sharp rocks":0, "rusty fishing hooks":0,
