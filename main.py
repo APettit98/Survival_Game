@@ -49,6 +49,8 @@ def main():
         print("Sorry that is not a valid command\n")
         handle_help()
 
+    handle_turn(game_g, user)
+
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+import time, random, os
+
 class clearing:
     def __init__(self):
         self.near_water = False
@@ -50,3 +52,33 @@ class cave:
     def __str__(self):
         str = "You come to the entrance of a dark cave"
         return str
+
+def handle_scavenge(time_l,player):
+    x = random.randint(1,2*time_l)
+    materials = list(player.materials.keys())
+    for i in range(0,x):
+        item = random.choice(materials)
+        player.materials[item] += 1
+        print("You found", item)
+        time.sleep(.25)
+    print("That's all you found!")
+    time.sleep(1)
+    os.system("clear")
+    print("Your materials: ",player.materials,"\n",
+          "Your food:",player.food,"\n","Your health:",player.health)
+
+
+def handle_hunt(time):
+    print("Hunt")
+
+def handle_fish(time):
+    print("Fish")
+
+def handle_walk(time):
+    print("Walk")
+
+def handle_sleep(time):
+    print("Sleep")
+
+def handle_build(time):
+    print("Build")
