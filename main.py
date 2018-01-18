@@ -20,6 +20,7 @@ def main():
     answer = answer.lower()
     if answer == "help":
         handle_help()
+        handle_turn(game_g,user,False)
     elif answer == 'north' or answer.startswith("n"):
         length = ask_amount("time")
         game_g.coordinates[1] += length
@@ -48,8 +49,9 @@ def main():
     else:
         print("Sorry that is not a valid command\n")
         handle_help()
-
-    handle_turn(game_g, user)
+    time_up(game_g,length,user)
+    handle_turn(game_g, user, True)
+    sys.exit()
 
 
 

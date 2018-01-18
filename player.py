@@ -12,7 +12,7 @@ class player:
                                  "cooked bear":0,"cooked turkey":0,
                                  "cooked porcupine":0}
 
-        self.health = {"hunger":0, "energy":0}
+        self.health = {"hunger":0, "energy":100}
         self.shelter = {"exits":False, "stability":0, "comfort":0}
         self.near_water = False
 
