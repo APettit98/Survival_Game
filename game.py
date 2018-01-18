@@ -37,7 +37,7 @@ def ask_amount(type):
 
 def handle_turn(game, player, new_scene):
     for lst in game.winning_coordinates:
-        if game.coordinates[0] == lst[0] and game.coordinates[1] == lst[1]:
+        if game.coordinates[0] == lst[0] and game.coordinates[1] == lst[1] or game.time["day"] >= 365:
             handle_win(player)
             return 0
     if player.health["energy"] <= 0 or player.health["hunger"] >= 100:
@@ -61,32 +61,37 @@ def handle_turn(game, player, new_scene):
     answer = input("What would you like to do next? ('help' for options) ")
     answer = answer.lower()
     handle_answer(answer,player,game)
-    print("TEST TEST TEST TEST TEST")
 
 def handle_answer(answer,player,game):
     if answer == "scavenge":
         time = ask_amount("time")
         handle_scavenge(time,player,game)
+        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "hunt":
         time = ask_amount("time")
         handle_hunt(time,player,game)
+        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "build":
         time = ask_amount("time")
         handle_build(time,player,game)
+        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "fish":
         time = ask_amount("time")
         handle_fish(time,player,game)
+        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "walk":
         time = ask_amount("time")
         handle_walk(time,player,game)
+        time_up(game,time,player)
         handle_turn(game,player,True)
     elif answer == "sleep":
         time = ask_amount("time")
         handle_sleep(time,player,game)
+        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "help":
         handle_help()
