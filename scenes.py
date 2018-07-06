@@ -194,6 +194,24 @@ def handle_hunt(time_l,player,game):
                     else:
                         print("You caught it!")
                         player.food["boar"] += 1
+                elif animal == "porcupine":
+                    print("You attacked the porcupine with your knife")
+                    time.sleep(.5)
+                    if x <= 50:
+                        print("You scared it and it attacked you with its needles! Thats gotta hurt...")
+                    elif x <= 70:
+                        print("It scurried up a tree before you could get it...")
+                    else:
+                        print("You caught it!")
+                        player.food["porcupine"] += 1
+                elif animal == "turkey":
+                    print("You attacked the turkey with your knife")
+                    time.sleep(.5)
+                    if x <= 60:
+                        print("You scared it away...")
+                    else:
+                        print("You successfully caught the turkey!")
+                        player.food["turkey"] += 1
                 elif animal == "deer":
                     print("You chased the deer with your knife")
                     time.sleep(.5)
