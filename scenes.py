@@ -1,4 +1,5 @@
 import time, random, os
+from game import *
 
 class clearing:
     def __init__(self):
@@ -7,8 +8,7 @@ class clearing:
         self.night_danger = 3
 
     def __str__(self):
-        str = "You come to a clearing in the woods"
-        return str
+        return "You come to a clearing in the woods"
 
 class lake:
     def __init__(self):
@@ -17,8 +17,7 @@ class lake:
         self.night_danger = 4
 
     def __str__(self):
-        str = "You come across a small lake"
-        return str
+        return "You come across a small lake"
 
 
 class woods:
@@ -28,8 +27,7 @@ class woods:
         self.night_danger = 8
 
     def __str__(self):
-        str = "You are standing in the middle of the woods"
-        return str
+        return "You are standing in the middle of the woods"
 
 
 class river:
@@ -39,8 +37,7 @@ class river:
         self.night_danger = 7
 
     def __str__(self):
-        str = "You come to the bank of a river"
-        return str
+        return "You come to the bank of a river"
 
 
 class cave:
@@ -50,8 +47,7 @@ class cave:
         self.night_danger = 10
 
     def __str__(self):
-        str = "You come to the entrance of a dark cave"
-        return str
+        return "You come to the entrance of a dark cave"
 
 def clear_scene(player):
     os.system("clear")
@@ -62,13 +58,21 @@ def handle_scavenge(time_l,player,game):
     x = random.randint(1,2*time_l)
     materials = list(player.materials.keys())
     for i in range(0,x):
-        item = random.choice(materials)
+        item = pick_item(player,materials)
         player.materials[item] += 1
         print("You found", item)
         time.sleep(.25)
     print("That's all you found!")
     time.sleep(1)
     clear_scene(player)
+
+def pick_item(player, materials):
+    item = "bows"
+    while item == "bows" or item == "spears" or item == "arros":
+        item = random.choice(materials)
+
+    return item
+
 
 
 def handle_hunt(time_l,player,game):
@@ -154,56 +158,59 @@ def handle_hunt(time_l,player,game):
         print("You decided to hunt the", animal)
         weapon = input("What weapon would you like to use? ")
         if weapon == "knife":
-            if player.materials["knife"] < 1:
+            if player.materials["knives"] < 1:
                 print("Sorry, you don't have that weapon!")
             else:
                 print("You used a knife to hunt the", animal)
                 x = random.randint(0,100)
                 if animal == "bear":
+                    print("You stupidly attacked a bear with a knife...")
+                    time.sleep(.5)
                     if x <= 40:
-                        print("You stupidly attacked a bear with a knife...")
-                        time.sleep(.5)
                         print(" Now you're dead...")
+                        handle_lose(player)
                         player.health["energy"] = 0
                     elif x <= 90:
-                        print("You stupidly attacked a bear with a knife...")
-                        time.sleep(.5)
                         print("Luckily you made it out alive...")
                     else:
-                        print("You stupidly attacked a bear with a knife...")
-                        time.sleep(.5)
                         print("But somehow you managed to kill it!")
                         player.food["bear"] += 1
                 elif animal == "squirrel" or animal == "rabbit":
+                    print("You chased the", animal, "with your knife..")
+                    time.sleep(.5)
                     if x <= 75:
-                        print("You chased the", animal, "with your knife..")
-                        time.sleep(.5)
                         print("You never even got close...")
                     else:
-                        print("You chased the", animal, "with your knife..")
-                        time.sleep(.5)
                         print("Somehow you were able to catch it!")
                         player.food[animal] += 1
                 elif animal == "boar":
+                    print("You attacked the boar with your knife...")
+                    time.sleep(.5)
                     if x <= 5:
-                        print("You attacked the boar with your knife...")
-                        time.sleep(.5)
                         print("It fought back and managed to kill you!")
-                        player.health["energy"] = 0
+                        handle_lose(player)
                     elif x <= 55:
-                        print("You attacked the boar with your knife...")
-                        time.sleep(.5)
                         print("It outran you...")
                     else:
-                        print("You attacked the boar with your knife...")
-                        time.sleep(.5)
                         print("You caught it!")
                         player.food["boar"] += 1
+                elif animal == "deer":
+                    print("You chased the deer with your knife")
+                    time.sleep(.5)
+                    if x <= 2:
+                        print("It kicked you in the temple and bashed your head in!")
+                        handle_lost(player)
+                    elif x <= 80:
+                        print("You weren't fast enough to catch it...")
+                    else:
+                        print("You caught the deer!")
+                        player.food["deer"] += 1
 
 
         elif weapon == "bow":
-
+            print("Not yet supported")
         elif weapon == "spear":
+            print("Not yet supported")
     else:
         print("You decided not to hunt the", animal)
 

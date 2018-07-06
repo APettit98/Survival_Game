@@ -8,7 +8,7 @@ def main():
     print("Welcome to this text survival game! What is your name?")
     name = input()
     user = player(name)
-    print("Good luck", name, "your adventure is about to begin...")
+    print("Good luck", user.name, "your adventure is about to begin...")
     time.sleep(2)
     os.system('clear')
     print("You wake up in the middle of the woods... "

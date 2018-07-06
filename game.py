@@ -74,7 +74,6 @@ def handle_answer(answer,player,game):
         time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "build":
-        time = ask_amount("time")
         handle_build(time,player,game)
         time_up(game,time,player)
         handle_turn(game,player,False)
@@ -95,12 +94,13 @@ def handle_answer(answer,player,game):
         handle_turn(game,player,False)
     elif answer == "help":
         handle_help()
+        handle_turn(game,player,False)
     else:
         print("Sorry that is not a valid command...")
         handle_help()
         answer = input("What would you like to do next? ")
         answer = answer.lower()
-        handle_answer(answer)
+        handle_answer(answer, player, game)
 
 def handle_win(player):
     x = random.randint(0,3)
