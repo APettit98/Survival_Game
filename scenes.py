@@ -253,7 +253,36 @@ def handle_fish(time_l,player,game):
     print("Fish")
 
 def handle_walk(time_l,player,game):
-    print("Walk")
+    print("Which direction would you like to go?")
+    answer = input()
+    answer = answer.lower()
+    if answer == "help":
+        handle_help()
+        handle_turn(game_g,user,False)
+    elif answer == 'north' or answer.startswith("n"):
+        length = ask_amount("time", game_g, user)
+        game_g.coordinates[1] += length
+        if game_g.coordinates[1] > 100:
+            print("Sorry you've reached the bounds of the game, you only walked",
+                  length - (game_g.coordinates[1] - 100), "hours")
+    elif answer == 'south' or answer.startswith("s"):
+        length = ask_amount("time", game_g, user)
+        game_g.coordinates[1] -= length
+        if game_g.coordinates[1] < -100:
+            print("Sorry you've reached the bounds of the game, you only walked",
+                  length + (game_g.coordinates[1] + 100), "hours")
+    elif answer == 'east' or answer.startswith("e"):
+        length = ask_amount("time", game_g, user)
+        game_g.coordinates[0] += length
+        if game_g.coordinates[0] > 100:
+            print("Sorry you've reached the bounds of the game, you only walked",
+                  length - (game_g.coordinates[0] - 100), "hours")
+    elif answer == 'west' or answer.startswith("w"):
+        length = ask_amount("time", game_g, user)
+        game_g.coordinates[0] -= length
+        if game_g.coordinates[0] < -100:
+            print("Sorry you've reached the bounds of the game, you only walked",
+                  length + (game_g.coordinates[1] + 100), "hours")
 
 def handle_sleep(time_l,player,game):
     print("Sleep")
