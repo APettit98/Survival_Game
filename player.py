@@ -12,8 +12,8 @@ class player:
                                  "cooked bear": 0,"cooked turkey": 0,
                                  "cooked porcupine": 0}
 
-        self.health = {"hunger": 0, "energy": 100}
-        self.shelter = {"exits": False, "stability": 0, "comfort": 0}
+        self.health = {"hunger": 0, "energy": 100, "injury": 0 }
+        self.shelter = {"exists": False, "stability": 0, "comfort": 0}
         self.near_water = False
 
     def __str__(self):

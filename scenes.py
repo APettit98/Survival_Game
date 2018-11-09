@@ -49,7 +49,7 @@ class cave:
     def __str__(self):
         return "You come to the entrance of a dark cave"
 
-def clear_scene(player):
+def clear_scene(player, game):
     os.system("clear")
     print("Your materials: ")
     for element in player.materials.keys():
@@ -62,6 +62,7 @@ def clear_scene(player):
             print(player.food[element])
 
     print("Your health: ",player.health)
+    print("Current time: ",game.time)
 
 def handle_scavenge(time_l,player,game):
     x = random.randint(1,2*time_l)
@@ -73,7 +74,7 @@ def handle_scavenge(time_l,player,game):
         time.sleep(.25)
     print("That's all you found!")
     time.sleep(1)
-    clear_scene(player)
+    clear_scene(player, game)
 
 def pick_item(player, materials):
     item = "bows"

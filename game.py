@@ -7,7 +7,7 @@ class game:
     def __init__(self):
         self.coordinates = [0,0]
         self.winning_coordinates = []
-        self.time = {"hour": 8, "day":1}
+        self.time = {"hour": 0, "day":1}
         self.scene = ""
         i = 0
         for i in range(0,101):
@@ -22,6 +22,9 @@ class game:
 def handle_help():
     os.system("cat help.txt")
 
+def handle_quit():
+    sys.exit(0)
+
 def time_up(game,length,player):
     game.time["hour"] += length
     if game.time["hour"] >= 24:
@@ -30,9 +33,10 @@ def time_up(game,length,player):
     player.health["energy"] -= 2 * length
     player.health["hunger"] += 2 * length
 
-def ask_amount(type):
+def ask_amount(type, game, player):
     if type == "time":
         response = int(input("How many hours would you like to do this for? "))
+        time_up(game,response,player)
     return response
 
 def handle_turn(game, player, new_scene):
@@ -64,37 +68,40 @@ def handle_turn(game, player, new_scene):
 
 def handle_answer(answer,player,game):
     if answer == "scavenge":
-        time = ask_amount("time")
+        time = ask_amount("time", game, player)
         handle_scavenge(time,player,game)
         time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "hunt":
-        time = ask_amount("time")
+        time = ask_amount("time", game, player)
         handle_hunt(time,player,game)
         time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "build":
+        time = ask_amount("time", game, player)
         handle_build(time,player,game)
         time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "fish":
-        time = ask_amount("time")
+        time = ask_amount("time", game, player)
         handle_fish(time,player,game)
         time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "walk":
-        time = ask_amount("time")
+        time = ask_amount("time", game, player)
         handle_walk(time,player,game)
         time_up(game,time,player)
         handle_turn(game,player,True)
     elif answer == "sleep":
-        time = ask_amount("time")
+        time = ask_amount("time", game, player)
         handle_sleep(time,player,game)
         time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "help":
         handle_help()
         handle_turn(game,player,False)
+    elif answer == 'quit':
+        handle_quit()
     else:
         print("Sorry that is not a valid command...")
         handle_help()
@@ -133,5 +140,8 @@ def handle_lose(player):
     elif player.health["hunger"] >= 100:
         print("You are too hungry to continue, you should have made eating more of"
               " a priority... Sorry,", player, "you have lost...")
+    elif player.health["injury"] >= 100:
+        print("After numerous mishaps on your road to survival, you finally succummed"
+        " to your many injuries... Sorry,", player, "you have lost...")
 
     return 0
