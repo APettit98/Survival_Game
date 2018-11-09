@@ -51,8 +51,17 @@ class cave:
 
 def clear_scene(player):
     os.system("clear")
-    print("Your materials: ",player.materials,"\n",
-          "Your food:",player.food,"\n","Your health:",player.health)
+    print("Your materials: ")
+    for element in player.materials.keys():
+        if player.materials.get(element) > 0:
+            print(element, player.materials[element])
+
+    print("\nYour food: ")
+    for element in player.food.keys():
+        if player.food.get(element) > 0:
+            print(player.food[element])
+
+    print("Your health: ",player.health)
 
 def handle_scavenge(time_l,player,game):
     x = random.randint(1,2*time_l)
@@ -199,6 +208,7 @@ def handle_hunt(time_l,player,game):
                     time.sleep(.5)
                     if x <= 50:
                         print("You scared it and it attacked you with its needles! Thats gotta hurt...")
+                        player.health["injury"] += 20
                     elif x <= 70:
                         print("It scurried up a tree before you could get it...")
                     else:
