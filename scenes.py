@@ -2,6 +2,13 @@ import time, random, os, sys
 from game import *
 from player import *
 
+# For all functions containing game or player parameters,
+# game and player are the global variables for the game and player that are
+# passed around to every function
+
+# Scene classes, each containing values for how dangerous they are,
+# whether or not they are near water, and a string output to be displayed
+# when the user reaches that scene
 class clearing:
     def __init__(self):
         self.near_water = False
@@ -50,6 +57,8 @@ class cave:
     def __str__(self):
         return "You come to the entrance of a dark cave"
 
+# clears the scene by clearing screen and displaying materials, food, health,
+# and time
 def clear_scene(player, game):
     os.system("clear")
     print("Your materials: ")
@@ -65,6 +74,8 @@ def clear_scene(player, game):
     print("Your health: ",player.health)
     print("Current time: ",game.time)
 
+# Handles case where user decides to scavenge
+# time_l is the length of time the user wants to scavenge
 def handle_scavenge(time_l,player,game):
     x = random.randint(1,2*time_l)
     materials = list(player.materials.keys())
@@ -77,15 +88,18 @@ def handle_scavenge(time_l,player,game):
     time.sleep(1)
     clear_scene(player, game)
 
+# Picks a random item to be picked up by the player
+# ensures player doesn't pick up, bows, spears, or arrows
 def pick_item(player, materials):
     item = "bows"
-    while item == "bows" or item == "spears" or item == "arros":
+    while item == "bows" or item == "spears" or item == "arrows":
         item = random.choice(materials)
 
     return item
 
 
-
+# Handles case where user decides to hunt
+# time_l is amount of time user wants to hunt
 def handle_hunt(time_l,player,game):
     x = random.randint(1,100)
     if game.scene == "clearing":
@@ -249,10 +263,11 @@ def handle_hunt(time_l,player,game):
 
 
 
-
+# NOT YET IMPLEMENTED
 def handle_fish(time_l,player,game):
     print("Fish")
 
+# Handles case where user wants to walk somewhere else
 def handle_walk(time_l,player,game):
     print("Which direction would you like to go?")
     answer = input()
@@ -289,8 +304,10 @@ def handle_walk(time_l,player,game):
         " Please try again...")
         handle_walk(time_l,player,game)
 
+# NOT YET IMPLEMENTED
 def handle_sleep(time_l,player,game):
     print("Sleep")
 
+# NOT YET IMPLEMENTED
 def handle_build(time_l,player,game):
     print("Build")

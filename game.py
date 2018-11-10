@@ -1,7 +1,7 @@
 import random, os
 from scenes import *
 
-# For all functions containing game or player,
+# For all functions containing game or player parameters,
 # game and player are the global variables for the game and player that are
 # passed around to every function
 
