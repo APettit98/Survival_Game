@@ -193,8 +193,8 @@ def handle_hunt(time_l,player,game):
                     time.sleep(.5)
                     if x <= 40:
                         print(" Now you're dead...")
+                        player.health["injury"] = 100
                         handle_lose(player)
-                        player.health["energy"] = 0
                     elif x <= 90:
                         print("Luckily you made it out alive...")
                     else:
@@ -213,6 +213,7 @@ def handle_hunt(time_l,player,game):
                     time.sleep(.5)
                     if x <= 5:
                         print("It fought back and managed to kill you!")
+                        player.health["injury"] = 100
                         handle_lose(player)
                     elif x <= 55:
                         print("It outran you...")
@@ -243,7 +244,8 @@ def handle_hunt(time_l,player,game):
                     time.sleep(.5)
                     if x <= 2:
                         print("It kicked you in the temple and bashed your head in!")
-                        handle_lost(player)
+                        player.health["injury"] = 100
+                        handle_lose(player)
                     elif x <= 80:
                         print("You weren't fast enough to catch it...")
                     else:
@@ -260,6 +262,8 @@ def handle_hunt(time_l,player,game):
 
     if time_l - 1 > 0:
         handle_hunt(time_l - 1, player, game)
+    else:
+        clear_scene(player,game)
 
 
 
@@ -304,9 +308,98 @@ def handle_walk(time_l,player,game):
         " Please try again...")
         handle_walk(time_l,player,game)
 
-# NOT YET IMPLEMENTED
+    clear_scene(player, game)
+
+# Gets danger values of current scene
+def get_danger(game):
+    scene = game.scene
+    if scene == 'clearing':
+        danger = [1,3]
+    elif scene == 'lake':
+        danger = [2,4]
+    elif scene == 'woods':
+        danger = [5,8]
+    elif scene == 'river':
+        danger = [4,7]
+    elif scene == 'cave':
+        danger = [7,10]
+    return danger
+
+
+# Handles case where user decides to sleep
+# Adds energy and also allows for possibility of a bear attack in the night
 def handle_sleep(time_l,player,game):
-    print("Sleep")
+    danger = get_danger(game)
+    if game.time["hour"] < 6 or game.time["hour"] > 21:
+        danger = danger[1]
+    else:
+        danger = danger[0]
+
+    x = random.randint(0, 100)
+    if x <= danger * 10:
+        print("A bear came out of nowhere and attacked you!\n"
+        "Quick! Roll right (r) or left (l), or pull out your knife (k)!")
+        answer = input()
+        y = random.choice(['r','l'])
+        if answer.lower().startswith(y) and not answer.lower().startswith('k'):
+            print("Shew, you successfully rolled away")
+            if player.shelter["exists"]:
+                print("Unfortunately it damaged your shelter...")
+                shelter_damage(player, 25)
+        elif answer.lower().startswith('k'):
+            if player.materials["knives"] > 0:
+                print("You pulled out your knife in defense!")
+                z = random.randint(0,100)
+                if z <= 35:
+                    print("You stabbed the bear as it attacked you and killed it!")
+                    print("Unfortunately it managed to damage your shelter...")
+                    shelter_damage(player, 20)
+                    player.food["bear"] += 1
+                elif z <= 70:
+                    print("You stabbed the bear as it attacked you and it ran away, "
+                    "but not after it gave you a few nasty cuts...")
+                    print("Unfortunately it also damaged your shelter...")
+                    shelter_damage(player, 35)
+                    player.health["injury"] += 20
+                else:
+                    print("You attempted to stab the bear but you could't get to your knife "
+                    "quickly enough!")
+                    player.health["injury"] = 100
+                    handle_lose(player)
+            else:
+                print("You reached for your knife, but you don't have one! "
+                "Should've run while you had the chance...")
+                player.health["injury"] = 100
+                handle_lose(player)
+        else:
+            print("Unfortunately you rolled straight into the bear's swiping paw...")
+            player.health["injury"] = 100
+            handle_lose(player)
+
+    player.health["energy"] += 5 * time_l + (2 * player.shelter["comfort"])
+    if player.health["energy"] > 100:
+        player.health["energy"] = 100
+
+    print("You got", time_l, "hours of sleep")
+    time.sleep(2)
+    clear_scene(player, game)
+
+
+
+# Called when shelter is damaged
+def shelter_damage(player, amount):
+    shelter = player.shelter
+    player.shelter["stability"] -= amount
+    player.shelter["comfort"] -= amount
+    if player.shelter["stability"] <= 0:
+        player.shelter["exists"] = False
+        player.shelter["stability"] = 0
+        player.shelter["comfort"] = 0
+    elif player.shelter["comfort"] < 0:
+        player.shelter["comfort"] = 0
+
+
+
 
 # NOT YET IMPLEMENTED
 def handle_build(time_l,player,game):

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import random, sys, os, time
 from player import *
 from game import *

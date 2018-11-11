@@ -1,5 +1,4 @@
-import random, os
-from scenes import *
+import random, os, sys
 
 # For all functions containing game or player parameters,
 # game and player are the global variables for the game and player that are
@@ -69,6 +68,7 @@ def handle_turn(game, player, new_scene):
         handle_lose(player)
         return 1
     if new_scene:
+        from scenes import cave, river, lake, woods, clearing
         scene_name = random.choice(scene_options)
         game.scene = scene_name
         if scene_name == "cave":
@@ -90,6 +90,7 @@ def handle_turn(game, player, new_scene):
 # Handles user's response when asked what to do next
 # Answer is the next action
 def handle_answer(answer,player,game):
+    from scenes import handle_scavenge, handle_hunt, handle_build, handle_walk, handle_sleep
     if answer == "scavenge":
         time = ask_amount("time", game, player)
         handle_scavenge(time,player,game)
@@ -168,5 +169,8 @@ def handle_lose(player):
     elif player.health["injury"] >= 100:
         print("After numerous mishaps on your road to survival, you finally succummed"
         " to your many injuries... Sorry,", player, "you have lost...")
+    else:
+        print("The code says you died but it doesn't say why...."
+        " I probably screwed something up, sucks for you!")
 
-    return 0
+    sys.exit(0)
