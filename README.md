@@ -10,3 +10,7 @@ I made a game with the same premise as this when I was first learning how to cod
 
 * Implement building 
 * Implement fishing
+
+## Other Ideas
+* Deploy as an App
+    * Integrate with a database to keep track of best scores
