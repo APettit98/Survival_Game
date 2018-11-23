@@ -69,7 +69,7 @@ def clear_scene(player, game):
     print("\nYour food: ")
     for element in player.food.keys():
         if player.food.get(element) > 0:
-            print(player.food[element])
+            print(element, player.food[element])
 
     print("Your health: ",player.health)
     print("Current time: ",game.time)
@@ -92,7 +92,7 @@ def handle_scavenge(time_l,player,game):
 # ensures player doesn't pick up, bows, spears, or arrows
 def pick_item(player, materials):
     item = "bows"
-    while item == "bows" or item == "spears" or item == "arrows":
+    while item == "bows" or item == "spears" or item == "arrows" or item == "fishing poles":
         item = random.choice(materials)
 
     return item
@@ -267,9 +267,26 @@ def handle_hunt(time_l,player,game):
 
 
 
-# NOT YET IMPLEMENTED
+# Handles case where user wants to fish
 def handle_fish(time_l,player,game):
-    print("Fish")
+    scene = game.scene
+    if scene != 'lake' and scene != 'river':
+        print("You can't fish here, there's no water!")
+        clear_scene(player,game)
+    if player.materials["fishing poles"] == 0:
+        print("You don't have anything to fish with, you need to make a fishing pole first")
+        clear_scene(player,game)
+    else:
+        num_fish = 0
+        for i in range (0,time_l):
+            x = random.randint(0,100)
+            if x < 50:
+                num_fish += 1
+
+        print("You caught {} fish!".format(num_fish))
+        player.food["fish"] += num_fish
+        clear_scene(player,game)
+
 
 # Handles case where user wants to walk somewhere else
 def handle_walk(time_l,player,game):

@@ -90,7 +90,7 @@ def handle_turn(game, player, new_scene):
 # Handles user's response when asked what to do next
 # Answer is the next action
 def handle_answer(answer,player,game):
-    from scenes import handle_scavenge, handle_hunt, handle_build, handle_walk, handle_sleep
+    from scenes import handle_scavenge, handle_hunt, handle_build, handle_walk, handle_sleep, handle_fish
     if answer == "scavenge":
         time = ask_amount("time", game, player)
         handle_scavenge(time,player,game)
