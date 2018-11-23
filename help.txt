@@ -1,3 +1,7 @@
+Instructions:
+                 Your goal is to either find civilization by exploring the game
+                 map or to survive for 365 days
+
 Valid directions:
                  'north' or 'n'
                  'south' or 's'
@@ -12,3 +16,17 @@ Valid commands:
                 'fish'
                 'walk'
                 'sleep'
+                'help'
+                'quit'
+
+Valid weapons:
+                'knife'
+                'bow'
+                'spear'
+
+Things you can build:
+                'shelter'
+                'bow'
+                'arrow'
+                'fishing pole'
+                'spear'

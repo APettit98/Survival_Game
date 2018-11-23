@@ -70,6 +70,8 @@ def clear_scene(player, game):
     for element in player.food.keys():
         if player.food.get(element) > 0:
             print(element, player.food[element])
+    if player.shelter["exists"]:
+        print("\nYour shelter: ", player.shelter)
 
     print("Your health: ",player.health)
     print("Current time: ",game.time)
@@ -178,8 +180,8 @@ def handle_hunt(time_l,player,game):
                 else:
                     animal = "deer"
     print("You found a", animal, "would you like to hunt it? (y/n) ")
-    will_hunt = input()
-    if will_hunt.lower().startswith('y'):
+    will_hunt = input().lower()
+    if will_hunt.startswith('y'):
         print("You decided to hunt the", animal)
         weapon = input("What weapon would you like to use? ")
         if weapon == "knife":
@@ -263,6 +265,7 @@ def handle_hunt(time_l,player,game):
     if time_l - 1 > 0:
         handle_hunt(time_l - 1, player, game)
     else:
+        time_up(game,time_l,player)
         clear_scene(player,game)
 
 
@@ -275,6 +278,7 @@ def handle_fish(time_l,player,game):
         clear_scene(player,game)
     if player.materials["fishing poles"] == 0:
         print("You don't have anything to fish with, you need to make a fishing pole first")
+        time.sleep(2)
         clear_scene(player,game)
     else:
         num_fish = 0
@@ -285,14 +289,14 @@ def handle_fish(time_l,player,game):
 
         print("You caught {} fish!".format(num_fish))
         player.food["fish"] += num_fish
+        time_up(game,time_l,player)
         clear_scene(player,game)
 
 
 # Handles case where user wants to walk somewhere else
 def handle_walk(time_l,player,game):
     print("Which direction would you like to go?")
-    answer = input()
-    answer = answer.lower()
+    answer = input().lower()
     if answer == "help":
         handle_help()
         handle_turn(game,player,False)
@@ -325,6 +329,7 @@ def handle_walk(time_l,player,game):
         " Please try again...")
         handle_walk(time_l,player,game)
 
+    time_up(game,time_l,player)
     clear_scene(player, game)
 
 # Gets danger values of current scene
@@ -347,16 +352,17 @@ def get_danger(game):
 # Adds energy and also allows for possibility of a bear attack in the night
 def handle_sleep(time_l,player,game):
     danger = get_danger(game)
+    energy = player.health["energy"]
     if game.time["hour"] < 6 or game.time["hour"] > 21:
         danger = danger[1]
     else:
         danger = danger[0]
 
     x = random.randint(0, 100)
-    if x <= danger * 10:
+    if x <= danger * 9:
         print("A bear came out of nowhere and attacked you!\n"
         "Quick! Roll right (r) or left (l), or pull out your knife (k)!")
-        answer = input()
+        answer = input().lower()
         y = random.choice(['r','l'])
         if answer.lower().startswith(y) and not answer.lower().startswith('k'):
             print("Shew, you successfully rolled away")
@@ -393,12 +399,14 @@ def handle_sleep(time_l,player,game):
             player.health["injury"] = 100
             handle_lose(player)
 
-    player.health["energy"] += 5 * time_l + (2 * player.shelter["comfort"])
-    if player.health["energy"] > 100:
-        player.health["energy"] = 100
+    energy += 5 * time_l + (2 * player.shelter["comfort"])
+    if energy > 100:
+        energy = 100
 
     print("You got", time_l, "hours of sleep")
     time.sleep(2)
+    time_up(game, time_l,player)
+    player.health["energy"] = energy
     clear_scene(player, game)
 
 
@@ -420,4 +428,55 @@ def shelter_damage(player, amount):
 
 # NOT YET IMPLEMENTED
 def handle_build(time_l,player,game):
-    print("Build")
+    print("What would you like to build?")
+    answer = input().lower()
+    if answer == "shelter":
+        if player.materials["logs"] < 3:
+            print("You dont have enough wood to make a shelter")
+            clear_scene(player,game)
+        else:
+            print("How many logs would you like to use?")
+            logs = int(input())
+            if logs > player.materials["logs"]:
+                logs = player.materials["logs"]
+                print("You didn't have that many logs so you added {} logs".format(logs))
+            print("You added {} logs to your shelter".format(logs))
+            player.materials["logs"] -= logs
+            player.shelter["stability"] += logs * 2
+            player.shelter["exists"] = True
+            player.shelter["comfort"] += logs // 2
+        if player.materials["rope"] > 0:
+            print("How much rope would you like to use?")
+            rope = int(input())
+            if rope > player.materials["rope"]:
+                rope = player.materials["rope"]
+                print("You didn't have that much rope so you only added {}".format(rope))
+            print("You added {} rope to your shelter".format(rope))
+            player.materials["rope"] -= rope
+            player.shelter["stability"] += rope
+        if player.materials["moss"] > 0:
+            print("How much moss would you like to add?")
+            moss = int(input())
+            if moss > player.materials["moss"]:
+                moss = player.materials["moss"]
+                print("You didn't have that much moss so you only added {}".format(moss))
+            print("You added {} moss to your shelter".format(moss))
+            player.materials["moss"] -= moss
+            player.shelter["comfort"] += moss * 2
+        print("You built a shelter with {} stability and {} comfort".format(player.shelter["stability"], player.shelter["comfort"]))
+        time_up(game,time_l,player)
+        time.sleep(2)
+        clear_scene(player,game)
+
+    #elif answer == "bow":
+
+
+    #elif answer == "arrow":
+
+
+    #elif answer == "spear":
+
+    else:
+        print("That is not someething you can build...try again")
+        hanlde_help()
+        handle_build(time-l, player,game)

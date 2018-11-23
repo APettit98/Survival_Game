@@ -94,32 +94,26 @@ def handle_answer(answer,player,game):
     if answer == "scavenge":
         time = ask_amount("time", game, player)
         handle_scavenge(time,player,game)
-        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "hunt":
         time = ask_amount("time", game, player)
         handle_hunt(time,player,game)
-        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "build":
         time = ask_amount("time", game, player)
         handle_build(time,player,game)
-        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "fish":
         time = ask_amount("time", game, player)
         handle_fish(time,player,game)
-        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "walk":
         time = ask_amount("time", game, player)
         handle_walk(time,player,game)
-        time_up(game,time,player)
         handle_turn(game,player,True)
     elif answer == "sleep":
         time = ask_amount("time", game, player)
         handle_sleep(time,player,game)
-        time_up(game,time,player)
         handle_turn(game,player,False)
     elif answer == "help":
         handle_help()
