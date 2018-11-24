@@ -426,13 +426,15 @@ def shelter_damage(player, amount):
 
 
 
-# NOT YET IMPLEMENTED
-def handle_build(time_l,player,game):
+# Handles case where user decides to build
+# Only shelter and bows implemented so far
+def handle_build(player,game):
     print("What would you like to build?")
     answer = input().lower()
     if answer == "shelter":
         if player.materials["logs"] < 3:
             print("You dont have enough wood to make a shelter")
+            time.sleep(2)
             clear_scene(player,game)
         else:
             print("How many logs would you like to use?")
@@ -468,8 +470,19 @@ def handle_build(time_l,player,game):
         time.sleep(2)
         clear_scene(player,game)
 
-    #elif answer == "bow":
-
+    elif answer == "bow":
+        if player.materials["string"] < 1 or player.materials["sticks"] < 1:
+            print("You don't have enough materials to make a bow")
+            time.sleep(2)
+            clear_scene(player,game)
+        else:
+            player.materials["string"] -= 1
+            player.materials["sticks"] -= 1
+            player.materials["bows"] += 1
+            print("You made a bow! It took you 2 hours")
+            time_up(game, 2, player)
+            time.sleep(2)
+            clear_scene(player,game)
 
     #elif answer == "arrow":
 

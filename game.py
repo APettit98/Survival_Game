@@ -100,8 +100,7 @@ def handle_answer(answer,player,game):
         handle_hunt(time,player,game)
         handle_turn(game,player,False)
     elif answer == "build":
-        time = ask_amount("time", game, player)
-        handle_build(time,player,game)
+        handle_build(player,game)
         handle_turn(game,player,False)
     elif answer == "fish":
         time = ask_amount("time", game, player)
