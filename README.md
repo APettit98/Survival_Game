@@ -8,7 +8,6 @@ I made a game with the same premise as this when I was first learning how to cod
 
 ## TODO
 
-* Finish implementing building
 * Implement fishing
 * Implement hunting with bows/spears
 

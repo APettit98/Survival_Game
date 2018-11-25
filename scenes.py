@@ -375,14 +375,16 @@ def handle_sleep(time_l,player,game):
                 z = random.randint(0,100)
                 if z <= 35:
                     print("You stabbed the bear as it attacked you and killed it!")
-                    print("Unfortunately it managed to damage your shelter...")
-                    shelter_damage(player, 20)
+                    if player.shelter["exists"]:
+                        print("Unfortunately it managed to damage your shelter...")
+                        shelter_damage(player, 20)
                     player.food["bear"] += 1
                 elif z <= 70:
                     print("You stabbed the bear as it attacked you and it ran away, "
                     "but not after it gave you a few nasty cuts...")
-                    print("Unfortunately it also damaged your shelter...")
-                    shelter_damage(player, 35)
+                    if player.shelter["exists"]:
+                        print("Unfortunately it managed to damage your shelter...")
+                        shelter_damage(player, 20)
                     player.health["injury"] += 20
                 else:
                     print("You attempted to stab the bear but you could't get to your knife "
@@ -437,12 +439,14 @@ def handle_build(player,game):
             time.sleep(2)
             clear_scene(player,game)
         else:
+            time_spent = 0
             print("How many logs would you like to use?")
             logs = int(input())
             if logs > player.materials["logs"]:
                 logs = player.materials["logs"]
                 print("You didn't have that many logs so you added {} logs".format(logs))
             print("You added {} logs to your shelter".format(logs))
+            time_spent += 0.25 * logs
             player.materials["logs"] -= logs
             player.shelter["stability"] += logs * 2
             player.shelter["exists"] = True
@@ -454,6 +458,7 @@ def handle_build(player,game):
                 rope = player.materials["rope"]
                 print("You didn't have that much rope so you only added {}".format(rope))
             print("You added {} rope to your shelter".format(rope))
+            time_spent += 0.25 * rope
             player.materials["rope"] -= rope
             player.shelter["stability"] += rope
         if player.materials["moss"] > 0:
@@ -463,10 +468,12 @@ def handle_build(player,game):
                 moss = player.materials["moss"]
                 print("You didn't have that much moss so you only added {}".format(moss))
             print("You added {} moss to your shelter".format(moss))
+            time_spent += .25 * moss
             player.materials["moss"] -= moss
             player.shelter["comfort"] += moss * 2
         print("You built a shelter with {} stability and {} comfort".format(player.shelter["stability"], player.shelter["comfort"]))
-        time_up(game,time_l,player)
+        time_up(game,int(time_spent,10),player)
+        print("It took you {} hours to build".format(int(time_spent, 10)))
         time.sleep(2)
         clear_scene(player,game)
 
@@ -479,15 +486,55 @@ def handle_build(player,game):
             player.materials["string"] -= 1
             player.materials["sticks"] -= 1
             player.materials["bows"] += 1
-            print("You made a bow! It took you 2 hours")
+            print("You made a bow! It took you 4 hours")
+            time_up(game, 4, player)
+            time.sleep(2)
+            clear_scene(player,game)
+
+    elif answer == "arrow":
+        if player.materials["sticks"] < 1 or player.materials["sharp rocks"] < 1:
+            print("You don't have enough materials to make an arrow")
+            time.sleep(2)
+            clear_scene(player,game)
+        else:
+            player.materials["sticks"] -= 1
+            player.materials["sharp rocks"] -= 1
+            player.materials["arrows"] += 1
+            print("You made an arrow! It took you 1 hour")
+            time_up(game,1,player)
+            time.sleep(2)
+            clear_scene(player,game)
+
+    elif answer == "spear":
+        if player.materials["sticks"] < 1 or player.materials["sharp rocks"] < 1 and player.materials["knives"] < 1 or player.materials["rope"] < 1:
+            print("You don't have enough materials to make a spear")
+            time.sleep(2)
+            clear_scene(player,game)
+        else:
+            if player.materials["knives"] > 0 and player.materials["sharp rocks"] > 0:
+                print("Would you like to use a knife or a sharp rock?")
+                answer = input().lower()
+                if answer.startswith('k'):
+                    print("You made a spear using a knife!")
+                    player.materials["knives"] -= 1
+                else:
+                    print("You made a spear using a sharp rock!")
+                    player.materials["sharp rocks"] -= 1
+            elif player.materials["knives"] > 0:
+                print("You made a spear using a knife!")
+                player.materials["knives"] -= 1
+            else:
+                print("You made a spear using a sharp rock!")
+                player.materials["sharp rocks"] -= 1
+
+            player.materials["sticks"] -= 1
+            player.materials["rope"] -= 1
+            player.materials["spears"] += 1
+            print("It took you 2 hours")
             time_up(game, 2, player)
             time.sleep(2)
             clear_scene(player,game)
 
-    #elif answer == "arrow":
-
-
-    #elif answer == "spear":
 
     else:
         print("That is not someething you can build...try again")
