@@ -8,7 +8,7 @@ I made a game with the same premise as this when I was first learning how to cod
 
 ## TODO
 
-* Implement fishing
+* Implement cooking/fires/eating
 * Implement hunting with bows/spears
 
 

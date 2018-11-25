@@ -289,6 +289,7 @@ def handle_fish(time_l,player,game):
 
         print("You caught {} fish!".format(num_fish))
         player.food["fish"] += num_fish
+        time.sleep(2)
         time_up(game,time_l,player)
         clear_scene(player,game)
 
@@ -429,7 +430,6 @@ def shelter_damage(player, amount):
 
 
 # Handles case where user decides to build
-# Only shelter and bows implemented so far
 def handle_build(player,game):
     print("What would you like to build?")
     answer = input().lower()
@@ -534,6 +534,21 @@ def handle_build(player,game):
             time_up(game, 2, player)
             time.sleep(2)
             clear_scene(player,game)
+    elif answer == "fishing pole":
+        if player.materials["sticks"] < 1 or player.materials["string"] < 1 or player.materials["rusty fishing hooks"] < 1:
+            print("You don't have enough materials to make a fishing pole!")
+            time.sleep(2)
+            clear_scene(player,game)
+        else:
+            print("You made a fishing pole! It took you 1 hour")
+            player.materials["sticks"] -= 1
+            player.materials["string"] -= 1
+            player.materials["rusty fishing hooks"] -= 1
+            player.materials["fishing poles"] += 1
+            time_up(game, 1, player)
+            time.sleep(2)
+            clear_scene(player,game)
+
 
 
     else:
